@@ -43,13 +43,17 @@
 * Keyboard install
 - sudo apk add qt5-qtvirtualkeyboard
 * Configuration
-- We have the =sxmo= configuration synced, just move the files in
-  =sxmo= to
-  + =/home/user/.config/sxmo=
-- If you have ssh setup you can run
-  + =rsync -auP ./sxmo user@ip:/home/user/.config/sxmo=
-** Syncing
-- =rsync -auP user@ip:/home/user/.config/sxmo  ./=
-- =rsync -auP ./sxmo user@ip:/home/user/.config/=
+- Just run the rsync script with the desired function
+- Note that global files will have to be moved by hand to =/bin/usr/=
+  as Ι can't input a password
 * dwm
 - =sudo apk add git make gcc g++ libx11-dev libxft-dev libxinerama-dev ncurses dbus-x11 firefox-esr adwaita-gtk2-theme adwaita-icon-theme ttf-dejavu=
+* Ideas
+[[https://man.archlinux.org/man/sway.5.en][sway man page]]
+** Workspace Management
+- instead of their wraparound technique which is lackluster, set it up
+  so that
+  + Swipping on the side just calls
+    * =sway workspace next=
+    * =swap workspace prev=
+  + And have a new gesture for making a new workspace
