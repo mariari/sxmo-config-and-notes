@@ -1,0 +1,55 @@
+* Finding Packages
+- https://pkgs.alpinelinux.org/packages?name=anki&branch=edge
+* Anki install
+- Overall both attempts below fail.
+- The =beta= fails as it does not give me a working anki binary
+- The =testing= fails as it requires =ankirspy= that fails to exist
+  anymore
+** Using Beta
+- The flatpak version seems not be able to update itself. Thus we need:
+
+  [[https://betas.ankiweb.net/intro.html][Anki Intro and Download]]
+- However this is not enough, we need various packages before we can
+  run all the instructions listed here.
+*** Packages needed
+- sudo apk add python3-dev
+- sudo apk add qt5-qtsystems-dev
+- sudo apk add py3-qtwebengine
+- sudo apk add qt5-qtmultimedia
+- sudo apk add py3-qtwebengine
+- sudo apk add py3-qt5
+  + This fixes the qt5 package error when trying to install anki via
+    pip
+- sudo apk add portaudio
+- sudo apk add py3-pyaudio
+- sudo apk add py3-wheel
+- sudo apk add py3-flask
+- _Unlikely but grabbed_
+  + sudo apk add py3-sip-pyqt5
+** Using Testing
+- Just grab it from the repo after going through [[test]]
+- _However that is not enough we also need to run_
+  + sudo pip install aqt
+    * This basically grabs the
+* Enable Testing Packages <<test>>
+- The testing repository is disabled by default, just run the
+  following
+  + sudo emacs /etc/apk/repositories
+    * _add to the end of the list_
+      - http://dl-3.alpinelinux.org/alpine/edge/main/
+      - https://dl-cdn.alpinelinux.org/alpine/edge/testing/
+      - https://dl-cdn.alpinelinux.org/alpine/edge/community/
+  + =sudo apk update=
+* Keyboard install
+- sudo apk add qt5-qtvirtualkeyboard
+* Configuration
+- We have the =sxmo= configuration synced, just move the files in
+  =sxmo= to
+  + =/home/user/.config/sxmo=
+- If you have ssh setup you can run
+  + =rsync -auP ./sxmo user@ip:/home/user/.config/sxmo=
+** Syncing
+- =rsync -auP user@ip:/home/user/.config/sxmo  ./=
+- =rsync -auP ./sxmo user@ip:/home/user/.config/=
+* dwm
+- =sudo apk add git make gcc g++ libx11-dev libxft-dev libxinerama-dev ncurses dbus-x11 firefox-esr adwaita-gtk2-theme adwaita-icon-theme ttf-dejavu=

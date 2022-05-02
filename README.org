@@ -1,0 +1,5 @@
+* SXMO Config
+This is my custom SXMO configuration files. I'll likely only give the
+files along with what directory they should go and replace.
+
+Further I'll include notes that were helpful for me in using sxmo.
