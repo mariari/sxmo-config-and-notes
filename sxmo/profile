@@ -1,5 +1,5 @@
 #!/bin/sh
-# configversion: c4996d637ffa87798c160e9d0c981945
+# configversion: 1
 
 # Please modify this file to your liking
 
@@ -36,9 +36,6 @@ command -v firefox >/dev/null && export BROWSER=firefox
 
 # Or, enable vibration feedback on keypress
 #export KEYBOARD_ARGS="-o | clickclack -V"
-
-# Set the scale factor in sway
-# export SXMO_SWAY_SCALE=2
 
 # To load specific part of configuration depending on the running environment
 case "$SXMO_WM" in
