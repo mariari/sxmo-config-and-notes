@@ -23,6 +23,8 @@ elif [ -d "$XDG_CONFIG_HOME/sxmo/userscripts" ]; then
 		sort -f
 fi
 
+write_line "$icon_cam Pomf" "pomf"
+write_line "$icon_cam Pomf (selection)" "pomf-selection"
 write_line "$icon_mic Record" "sxmo_record.sh"
 write_line "$icon_rss RSS" "sxmo_rss.sh"
 write_line "$icon_cam Screenshot" "sxmo_screenshot.sh"
