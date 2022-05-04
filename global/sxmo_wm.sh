@@ -1,10 +1,10 @@
 #!/bin/sh
-# SPDX-License-Identifier: AGPL-3.0-only
-# Copyright 2022 Sxmo Contributors
 
 # include common definitions
 # shellcheck source=scripts/core/sxmo_common.sh
 . "$(dirname "$0")/sxmo_common.sh"
+
+TOUCH_POINTER_ID="${SXMO_TOUCH_POINTER_ID:-"8"}"
 
 xorgdpms() {
 	STATE=off
@@ -26,7 +26,7 @@ xorgdpms() {
 swaydpms() {
 	STATE=off
 	if swaymsg -t get_outputs \
-		| jq ".[] | .dpms" \
+		| jq '.[] | select(.name == "DSI-1") | .dpms' \
 		| grep -q "false"; then
 		STATE=on
 	fi
@@ -34,20 +34,14 @@ swaydpms() {
 	if [ -z "$1" ]; then
 		printf %s "$STATE"
 	elif [ "$1" = on ] && [ "$STATE" != on ]; then
-		swaymsg -- output '*' dpms false
+		swaymsg -- output DSI-1 dpms false
 	elif [ "$1" = off ] && [ "$STATE" != off ] ; then
-		swaymsg -- output '*' dpms true
+		swaymsg -- output DSI-1 dpms true
 	fi
 
 }
 
 xorginputevent() {
-	if [ "$1" = "touchscreen" ]; then
-		TOUCH_POINTER_ID="$SXMO_TOUCHSCREEN_ID"
-	elif [ "$1" = "stylus" ]; then
-		TOUCH_POINTER_ID="$SXMO_STYLUS_ID"
-	fi
-
 	STATE=off
 	if xinput list-props "$TOUCH_POINTER_ID" | \
 		grep "Device Enabled" | \
@@ -55,49 +49,29 @@ xorginputevent() {
 		STATE=on
 	fi
 
-	if [ -z "$2" ]; then
+	if [ -z "$1" ]; then
 		printf %s "$STATE"
-	elif [ "$2" = on ] && [ "$STATE" != on ]; then
+	elif [ "$1" = on ] && [ "$STATE" != on ]; then
 		xinput enable "$TOUCH_POINTER_ID"
-	elif [ "$2" = off ] && [ "$STATE" != off ] ; then
+	elif [ "$1" = off ] && [ "$STATE" != off ] ; then
 		xinput disable "$TOUCH_POINTER_ID"
 	fi
 }
 
 swayinputevent() {
-	if [ "$1" = "touchscreen" ]; then
-		TOUCH_POINTER_ID="touch"
-	elif [ "$1" = "stylus" ]; then
-		TOUCH_POINTER_ID="tablet_tool"
-	fi
-
-	# If we dont have any matching input
-	if ! swaymsg -t get_inputs \
-		| gojq -r ".[] | select(.type == \"$TOUCH_POINTER_ID\" )" \
-		| grep -q .; then
-
-		if [ -z "$2" ]; then
-			printf "not found"
-			exit 0
-		else
-			sxmo_notify_user.sh "No matching \"$TOUCH_POINTER_ID\" input has been found"
-			exit 1
-		fi
-	fi
-
 	STATE=on
 	if swaymsg -t get_inputs \
-		| jq -r ".[] | select(.type == \"$TOUCH_POINTER_ID\" ) | .libinput.send_events" \
+		| jq -r '.[] | select(.type == "touch" ) | .libinput.send_events' \
 		| grep -q "disabled"; then
 		STATE=off
 	fi
 
-	if [ -z "$2" ]; then
+	if [ -z "$1" ]; then
 		printf %s "$STATE"
-	elif [ "$2" = on ] && [ "$STATE" != on ]; then
-		swaymsg -- input type:"$TOUCH_POINTER_ID" events enabled
-	elif [ "$2" = off ] && [ "$STATE" != off ] ; then
-		swaymsg -- input type:"$TOUCH_POINTER_ID" events disabled
+	elif [ "$1" = on ] && [ "$STATE" != on ]; then
+		swaymsg -- input type:touch events enabled
+	elif [ "$1" = off ] && [ "$STATE" != off ] ; then
+		swaymsg -- input type:touch events disabled
 	fi
 }
 
@@ -120,15 +94,6 @@ swayfocusedwindow() {
 			{app_id: .app_id, name: .name} |
 			"app: " + .app_id, "title: " + .name
 		'
-}
-
-swaypaste() {
-	wl-paste
-}
-
-xorgpaste() {
-
-	xclip -o
 }
 
 swayexec() {
@@ -273,17 +238,6 @@ xorgmoveworkspace() {
 		export DISPLAY=:0
 	fi
 	xdotool key --clearmodifiers "Super+shift+$1"
-}
-
-swaytogglebar() {
-	swaymsg bar mode toggle
-}
-
-xorgtogglebar() {
-	if [ -z "$DISPLAY" ]; then
-		export DISPLAY=:0
-	fi
-	xdotool key --clearmodifiers "Super+b"
 }
 
 action="$1"

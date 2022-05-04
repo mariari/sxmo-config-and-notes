@@ -41,7 +41,16 @@
       - https://dl-cdn.alpinelinux.org/alpine/edge/community/
   + =sudo apk update=
 * Keyboard install
-- sudo apk add qt5-qtvirtualkeyboard
+- =sudo apk add qt5-qtvirtualkeyboard=
+- =sudo apk add maliit-keyboard=
+  + Sadly this won't grab
+    * =sudo apk add qt5-qtgraphicaleffects=
+    * =sudo apk add qt5-qtquickcontrols=
+    * =sudo apk add qt5-qtquickcontrols2=
+    * =sudo apk add qt5-qtmultimedia=
+    * =saudiouado apk add maliit-framework-dev=
+  + This may just be because audio is broken on my end, more
+    experimentation is neeeded to see
 * Configuration
 - Just run the rsync script with the desired function
 - Note that global files will have to be moved by hand to =/bin/usr/=

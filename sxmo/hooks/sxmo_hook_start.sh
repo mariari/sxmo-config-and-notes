@@ -72,9 +72,6 @@ superctl start sxmo_networkmonitor
 # The daemon that display notifications popup messages
 superctl start sxmo_notificationmonitor
 
-# startup the gesture control
-sxmo_hook_lisgdstart.sh
-
 # To setup initial lock state
 sxmo_hook_unlock.sh
 
